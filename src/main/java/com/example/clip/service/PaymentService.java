@@ -18,4 +18,8 @@ public class PaymentService {
     public Payment create(Payment payment) {
         return paymentRepository.save(payment);
     }
+
+    public List<String> getAllDistinctUsers() {
+        return paymentRepository.findAllDistinctUsers();
+    }
 }
