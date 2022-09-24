@@ -1,4 +1,4 @@
-package com.example.clip.request;
+package com.example.clip.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class PaymentRequest {
+public class PaymentRequestDTO {
     @NotNull
     String userId;
     @NotNull

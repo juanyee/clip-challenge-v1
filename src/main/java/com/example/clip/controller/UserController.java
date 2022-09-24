@@ -1,6 +1,6 @@
 package com.example.clip.controller;
 
-import com.example.clip.service.PaymentService;
+import com.example.clip.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,14 +16,14 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/clip/user")
+@RequestMapping("/api/clip/users")
 @AllArgsConstructor
 public class UserController {
 
-    private final PaymentService paymentService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<String>> getAllDistinctUsers() {
-        return new ResponseEntity<>(paymentService.getAllDistinctUsers(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAllDistinctUsers(), HttpStatus.OK);
     }
 }
