@@ -25,6 +25,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(value = {ClipNotFoundException.class})
+    protected ResponseEntity<Object> handlePublicNotFound(ClipNotFoundException ex, WebRequest request) {
+        final ClipError publicApiError = new ClipError(LocalDateTime.now(), HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(),
+                "Not found, the requested item is not available",
+                ((ServletWebRequest)request).getRequest().getRequestURI(), ex.getMessage());
+        return handleExceptionInternal(ex, publicApiError, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
     @ExceptionHandler(value = {Exception.class})
     protected ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest request) {
         final ClipError clipError = new ClipError(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(),

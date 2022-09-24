@@ -1,6 +1,7 @@
 package com.example.clip.service;
 
 import com.example.clip.dto.DisbursementResponseDTO;
+import com.example.clip.exception.ClipNotFoundException;
 import com.example.clip.model.Payment;
 import com.example.clip.model.PaymentStatus;
 import com.example.clip.repository.PaymentRepository;
@@ -40,6 +41,10 @@ public class DisbursementService {
 
     public DisbursementResponseDTO getDisbursementById(Long id) {
         Payment payment = paymentRepository.findByIdAndStatus(id, PaymentStatus.NEW);
+        if (payment==null) {
+            throw new ClipNotFoundException("id not found");
+        }
+
         payment.setAmount(payment.getAmount()
                 .multiply(new BigDecimal("0.965"))
                 .setScale(2, RoundingMode.HALF_DOWN)); // simple way to subtract 3.5%

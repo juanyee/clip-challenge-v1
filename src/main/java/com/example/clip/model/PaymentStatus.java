@@ -9,9 +9,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum PaymentStatus {
-
-    NEW("NEW"),
-    PROCESSED("PROCESSED");
-
-    private final String value;
+    NEW,
+    PROCESSED
 }
