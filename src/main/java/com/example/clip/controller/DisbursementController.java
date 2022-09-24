@@ -30,7 +30,7 @@ public class DisbursementController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DisbursementResponseDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<DisbursementResponseDTO> getDisbursementById(@PathVariable Long id) {
         return new ResponseEntity<>(disbursementService.getDisbursementById(id), HttpStatus.OK);
     }
 }

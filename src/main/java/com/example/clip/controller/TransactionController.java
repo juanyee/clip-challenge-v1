@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/clip/transactions")
@@ -29,10 +27,5 @@ public class TransactionController {
         payment.setAmount(paymentRequest.getAmount());
         payment.setUserId(paymentRequest.getUserId());
         return new ResponseEntity<>(new TransactionResponseDTO(paymentService.create(payment)), HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Payment>> getAll() {
-        return new ResponseEntity<>(paymentService.getAll(), HttpStatus.OK);
     }
 }

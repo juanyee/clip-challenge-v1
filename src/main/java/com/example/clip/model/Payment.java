@@ -1,6 +1,7 @@
 package com.example.clip.model;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,12 +25,18 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private String userId;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private PaymentStatus status;
+
+    @Column(name = "creation_date", nullable = false)
+    private Calendar creationDate;
+
+    @Column(name = "modification_date", nullable = false)
+    private Calendar modificationDate;
 }

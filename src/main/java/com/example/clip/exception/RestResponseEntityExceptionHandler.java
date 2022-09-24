@@ -12,6 +12,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -25,12 +26,20 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(value = {PersistenceException.class})
+    protected ResponseEntity<Object> handlePersistenceException(PersistenceException ex, WebRequest request) {
+        final ClipError clipError = new ClipError(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Something went wrong when in database communication",
+                ((ServletWebRequest)request).getRequest().getRequestURI(), ex.getMessage());
+        return handleExceptionInternal(ex, clipError, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
     @ExceptionHandler(value = {ClipNotFoundException.class})
-    protected ResponseEntity<Object> handlePublicNotFound(ClipNotFoundException ex, WebRequest request) {
-        final ClipError publicApiError = new ClipError(LocalDateTime.now(), HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(),
+    protected ResponseEntity<Object> handleClipNotFoundException(ClipNotFoundException ex, WebRequest request) {
+        final ClipError clipError = new ClipError(LocalDateTime.now(), HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(),
                 "Not found, the requested item is not available",
                 ((ServletWebRequest)request).getRequest().getRequestURI(), ex.getMessage());
-        return handleExceptionInternal(ex, publicApiError, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        return handleExceptionInternal(ex, clipError, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = {Exception.class})

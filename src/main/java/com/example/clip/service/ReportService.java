@@ -18,6 +18,11 @@ import java.util.List;
 public class ReportService {
     private final PaymentRepository paymentRepository;
 
+    /**
+     * Returns a report by UserId with the sum of all/new payments
+     * @param userId UserId to be reported
+     * @return the report
+     */
     public ReportResponseDTO getReportByUserId(String userId) {
         List<Payment> allPayments = paymentRepository.findByUserId(userId);
 
