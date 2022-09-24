@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author juan.yee
  */
@@ -20,6 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class ReportController {
     private final ReportService reportService;
+
+    @GetMapping
+    public ResponseEntity<List<ReportResponseDTO>> getReport() {
+        return new ResponseEntity<>(reportService.getReport(), HttpStatus.OK);
+    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<ReportResponseDTO> getReportByUserId(@PathVariable String userId) {
