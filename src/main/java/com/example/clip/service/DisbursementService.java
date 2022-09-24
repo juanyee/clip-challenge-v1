@@ -27,7 +27,7 @@ public class DisbursementService {
      * Generates disbursement for all transactions with status NEW and subtracts a fee of 3.5%
      * @return list of disbursed transactions
      */
-    public List<DisbursementResponseDTO> getDisbursement() {
+    public synchronized List<DisbursementResponseDTO> getDisbursement() {
         List<Payment> payments = paymentRepository.findByStatus(PaymentStatus.NEW).stream()
                 .map(item -> {
                     item.setAmount(item.getAmount()
