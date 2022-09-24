@@ -26,6 +26,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(value = {ClipBadRequestException.class})
+    protected ResponseEntity<Object> handleClipBadRequestException(ClipBadRequestException ex, WebRequest request) {
+        final ClipError clipError = new ClipError(LocalDateTime.now(), HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(),
+                "Bad request, invalid set of parameters were provided",
+                ((ServletWebRequest)request).getRequest().getRequestURI(), ex.getMessage());
+        return handleExceptionInternal(ex, clipError, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
     @ExceptionHandler(value = {PersistenceException.class})
     protected ResponseEntity<Object> handlePersistenceException(PersistenceException ex, WebRequest request) {
         final ClipError clipError = new ClipError(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(),

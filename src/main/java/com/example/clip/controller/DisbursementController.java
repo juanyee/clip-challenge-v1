@@ -1,6 +1,7 @@
 package com.example.clip.controller;
 
 import com.example.clip.dto.DisbursementResponseDTO;
+import com.example.clip.exception.ClipBadRequestException;
 import com.example.clip.service.DisbursementService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,9 @@ public class DisbursementController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DisbursementResponseDTO> getDisbursementById(@PathVariable Long id) {
+        if (id == null) {
+            throw new ClipBadRequestException("id must not be null");
+        }
         return new ResponseEntity<>(disbursementService.getDisbursementById(id), HttpStatus.OK);
     }
 }

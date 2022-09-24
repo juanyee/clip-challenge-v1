@@ -11,8 +11,6 @@ import java.math.BigDecimal;
 /**
  * @author juan.yee
  */
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class ReportResponseDTO {

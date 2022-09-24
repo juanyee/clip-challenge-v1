@@ -1,6 +1,7 @@
 package com.example.clip.service;
 
 import com.example.clip.dto.ReportResponseDTO;
+import com.example.clip.exception.ClipNotFoundException;
 import com.example.clip.model.Payment;
 import com.example.clip.model.PaymentStatus;
 import com.example.clip.repository.PaymentRepository;
@@ -35,7 +36,7 @@ public class ReportService {
 
         // perform the regarding sums per userId
         return lists.stream()
-                .map(payments -> getReportByPaymentList(payments.get(0).getUserId(), payments))
+                .map(userPayments -> getReportByPaymentList(userPayments.get(0).getUserId(), userPayments))
                 .collect(Collectors.toList());
     }
 
@@ -45,21 +46,24 @@ public class ReportService {
      * @return the report per user
      */
     public ReportResponseDTO getReportByUserId(String userId) {
-        List<Payment> payments = paymentRepository.findByUserId(userId);
-        return getReportByPaymentList(userId, payments);
+        List<Payment> userPayments = paymentRepository.findByUserId(userId);
+        if (userPayments == null || userPayments.size() == 0) {
+            throw new ClipNotFoundException("userId not found");
+        }
+        return getReportByPaymentList(userId, userPayments);
     }
 
-    private ReportResponseDTO getReportByPaymentList(String userId, List<Payment> payments) {
+    private ReportResponseDTO getReportByPaymentList(String userId, List<Payment> userPayments) {
         ReportResponseDTO report = new ReportResponseDTO();
         report.setUserId(userId);
-        report.setPaymentSum(payments.stream()
+        report.setPaymentSum(userPayments.stream()
                 .map(Payment::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
-        report.setNewPayments(payments.stream()
+        report.setNewPayments(userPayments.stream()
                 .filter(item -> item.getStatus() == PaymentStatus.NEW)
                 .map(Payment::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
-        report.setNewPaymentsAmount(payments.stream()
+        report.setNewPaymentsAmount(userPayments.stream()
                 .filter(item -> item.getStatus() == PaymentStatus.NEW)
                 .count());
         return report;

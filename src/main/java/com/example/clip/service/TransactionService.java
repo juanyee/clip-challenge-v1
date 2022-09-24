@@ -1,5 +1,6 @@
 package com.example.clip.service;
 
+import com.example.clip.dto.TransactionResponseDTO;
 import com.example.clip.model.Payment;
 import com.example.clip.model.PaymentStatus;
 import com.example.clip.repository.PaymentRepository;
@@ -13,7 +14,7 @@ import java.util.Calendar;
  */
 @Service
 @AllArgsConstructor
-public class PaymentService {
+public class TransactionService {
     private final PaymentRepository paymentRepository;
 
     /**
@@ -21,10 +22,10 @@ public class PaymentService {
      * @param payment payment to be created
      * @return the created payment
      */
-    public Payment create(Payment payment) {
+    public TransactionResponseDTO create(Payment payment) {
         payment.setStatus(PaymentStatus.NEW);
         payment.setCreationDate(Calendar.getInstance());
         payment.setModificationDate(Calendar.getInstance());
-        return paymentRepository.save(payment);
+        return new TransactionResponseDTO(paymentRepository.save(payment));
     }
 }
